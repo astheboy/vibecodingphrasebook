@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>바이브 코딩 회화집 — 말이 통해야 코드가 나온다</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=Nanum+Gothic+Coding:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F1EFE7;
+  --card:#FBFAF6;
+  --ink:#17202A;
+  --ink-2:#5A6674;
+  --ink-3:#8B95A1;
+  --cobalt:#2440D6;
+  --cobalt-soft:#E4E7FA;
+  --mustard:#D9A21B;
+  --mustard-soft:#F6E7BE;
+  --brick:#9A5F52;
+  --rule:#D8D3C4;
+  --rule-soft:#E7E3D7;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:'IBM Plex Sans KR',sans-serif;font-weight:400;
+  line-height:1.7;-webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+
+/* ── 표지 ─────────────────────────────── */
+.cover{padding:64px 0 40px;border-bottom:2px solid var(--ink)}
+.eyebrow{
+  font-family:'Nanum Gothic Coding',monospace;font-size:12px;letter-spacing:.22em;
+  color:var(--cobalt);text-transform:uppercase;margin:0 0 20px;
+}
+.cover h1{
+  font-family:'Gowun Batang',serif;font-weight:700;
+  font-size:clamp(38px,7.2vw,76px);line-height:1.12;letter-spacing:-.02em;
+  margin:0 0 22px;max-width:15ch;
+}
+.cover h1 em{font-style:normal;position:relative;white-space:nowrap}
+.cover h1 em::after{
+  content:"";position:absolute;left:-.06em;right:-.06em;bottom:.1em;height:.34em;
+  background:var(--mustard-soft);z-index:-1;
+}
+.lede{font-size:17px;color:var(--ink-2);max-width:52ch;margin:0 0 40px;font-weight:300}
+.lede b{font-weight:600;color:var(--ink)}
+
+/* 시그니처: 대역 카드 */
+.swap{
+  display:grid;grid-template-columns:1fr auto 1fr;gap:0;
+  border:2px solid var(--ink);background:var(--card);
+}
+.swap-side{padding:24px 26px}
+.swap-side + .swap-arrow + .swap-side{border-left:none}
+.swap-arrow{
+  display:flex;align-items:center;justify-content:center;width:56px;
+  border-left:1px solid var(--rule);border-right:1px solid var(--rule);
+  font-size:20px;color:var(--cobalt);background:#fff;
+}
+.swap-tag{
+  font-family:'Nanum Gothic Coding',monospace;font-size:11px;letter-spacing:.14em;
+  display:block;margin-bottom:12px;font-weight:700;
+}
+.swap-bad .swap-tag{color:var(--brick)}
+.swap-good .swap-tag{color:var(--cobalt)}
+.swap-line{
+  font-family:'Nanum Gothic Coding',monospace;font-size:13.5px;line-height:1.85;margin:0;
+}
+.swap-bad .swap-line{color:var(--ink-3)}
+.swap-note{font-size:12.5px;color:var(--ink-3);margin:14px 0 0;line-height:1.6}
+
+/* ── 사용법 3원칙 ──────────────────────── */
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-bottom:1px solid var(--rule);}
+.rule{padding:30px 26px 30px 0;border-right:1px solid var(--rule-soft)}
+.rule:last-child{border-right:none}
+.rule:not(:first-child){padding-left:26px}
+.rule-n{
+  font-family:'Nanum Gothic Coding',monospace;font-size:11px;color:var(--mustard);
+  font-weight:700;letter-spacing:.1em;display:block;margin-bottom:8px;
+}
+.rule h3{font-family:'Gowun Batang',serif;font-size:19px;margin:0 0 8px;font-weight:700}
+.rule p{margin:0;font-size:14px;color:var(--ink-2);font-weight:300;line-height:1.65}
+
+/* ── 검색 + 색인 ───────────────────────── */
+.toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--rule);}
+.toolbar-inner{display:flex;align-items:center;gap:18px;padding:16px 0;flex-wrap:wrap}
+.search{position:relative;flex:1;min-width:240px}
+.search input{
+  width:100%;padding:13px 15px 13px 42px;border:1.5px solid var(--ink);background:#fff;
+  font-family:'IBM Plex Sans KR',sans-serif;font-size:15px;color:var(--ink);border-radius:0;
+}
+.search input:focus{outline:none;border-color:var(--cobalt);box-shadow:0 0 0 3px var(--cobalt-soft)}
+.search input::placeholder{color:var(--ink-3)}
+.search svg{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:var(--ink-3)}
+.count{font-family:'Nanum Gothic Coding',monospace;font-size:12.5px;color:var(--ink-3);white-space:nowrap}
+.count b{color:var(--cobalt)}
+
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:0 0 16px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  flex:0 0 auto;padding:7px 14px;border:1px solid var(--rule);background:transparent;
+  font-family:'IBM Plex Sans KR',sans-serif;font-size:13.5px;color:var(--ink-2);
+  cursor:pointer;border-radius:0;transition:.15s;white-space:nowrap;
+}
+.tab:hover{border-color:var(--ink);color:var(--ink)}
+.tab[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper);font-weight:500}
+.tab:focus-visible{outline:2px solid var(--cobalt);outline-offset:2px}
+
+/* ── 본문 ──────────────────────────────── */
+main{padding:34px 0 90px}
+.group{margin-bottom:44px}
+.group-head{display:flex;align-items:baseline;gap:12px;margin:0 0 18px;padding-bottom:10px;border-bottom:2px solid var(--ink)}
+.group-head h2{font-family:'Gowun Batang',serif;font-size:24px;margin:0;font-weight:700}
+.group-head span{font-family:'Nanum Gothic Coding',monospace;font-size:12px;color:var(--ink-3)}
+
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.entry{
+  background:var(--card);border:1px solid var(--rule);padding:20px 22px 22px;
+  display:flex;flex-direction:column;
+}
+.entry-head{display:flex;align-items:baseline;gap:9px;margin-bottom:2px;flex-wrap:wrap}
+.num{
+  font-family:'Nanum Gothic Coding',monospace;font-size:11px;font-weight:700;
+  color:var(--mustard);letter-spacing:.06em;
+}
+.term{font-family:'Gowun Batang',serif;font-size:21px;font-weight:700;letter-spacing:-.01em}
+.eng{font-family:'Nanum Gothic Coding',monospace;font-size:11.5px;color:var(--ink-3)}
+.def{font-size:14.5px;color:var(--ink-2);margin:10px 0 0;font-weight:300;line-height:1.72}
+.def b{font-weight:600;color:var(--ink);background:linear-gradient(transparent 62%,var(--mustard-soft) 62%)}
+
+.say{margin-top:16px;border-top:1px dashed var(--rule);padding-top:14px;position:relative}
+.say-tag{
+  font-family:'Nanum Gothic Coding',monospace;font-size:10.5px;letter-spacing:.14em;
+  color:var(--cobalt);font-weight:700;display:block;margin-bottom:8px;
+}
+.say-body{
+  font-family:'Nanum Gothic Coding',monospace;font-size:13px;line-height:1.8;
+  background:#fff;border-left:3px solid var(--cobalt);padding:11px 13px;color:var(--ink);
+  margin:0;white-space:pre-wrap;word-break:break-word;
+}
+.copy{
+  position:absolute;right:0;top:10px;border:1px solid var(--rule);background:transparent;
+  font-family:'Nanum Gothic Coding',monospace;font-size:10.5px;color:var(--ink-3);
+  padding:3px 8px;cursor:pointer;transition:.15s;
+}
+.copy:hover{border-color:var(--cobalt);color:var(--cobalt)}
+.copy:focus-visible{outline:2px solid var(--cobalt);outline-offset:2px}
+
+.caution{
+  margin-top:12px;font-size:12.5px;color:var(--brick);line-height:1.6;
+  padding-left:16px;position:relative;font-weight:300;
+}
+.caution::before{content:"⚑";position:absolute;left:0;top:0;font-size:11px}
+
+.empty{text-align:center;padding:80px 20px;color:var(--ink-3)}
+.empty p{font-family:'Gowun Batang',serif;font-size:20px;margin:0 0 6px;color:var(--ink-2)}
+.empty small{font-family:'Nanum Gothic Coding',monospace;font-size:12.5px}
+
+footer{border-top:2px solid var(--ink);padding:28px 0 60px;font-size:13px;color:var(--ink-3)}
+footer p{margin:0 0 6px}
+mark{background:var(--mustard-soft);color:inherit;padding:0 1px}
+
+@media(max-width:860px){
+  .grid{grid-template-columns:1fr}
+  .rules{grid-template-columns:1fr}
+  .rule{border-right:none;border-bottom:1px solid var(--rule-soft);padding:22px 0}
+  .rule:not(:first-child){padding-left:0}
+  .rule:last-child{border-bottom:none}
+  .swap{grid-template-columns:1fr}
+  .swap-arrow{width:100%;height:40px;border:none;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);transform:rotate(90deg) scale(.9)}
+  .cover{padding:44px 0 32px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="wrap">
+    <p class="eyebrow">바이브 코딩 회화집 · Vibe Coding Phrasebook</p>
+    <h1>말이 통해야 <em>코드가 나온다</em></h1>
+    <p class="lede">AI에게 "알아서 잘 해줘"라고 말하면, AI도 알아서 잘 지어냅니다. 전문가가 아니어도 괜찮습니다. 다만 <b>내가 원하는 것을 AI가 아는 단어로 바꿔 말할 수만</b> 있으면 됩니다. 이 회화집은 그 번역을 도와줍니다.</p>
+
+    <div class="swap">
+      <div class="swap-side swap-bad">
+        <span class="swap-tag">✗ 이렇게 말했더니</span>
+        <p class="swap-line">"안 돼요. 고쳐주세요."</p>
+        <p class="swap-note">AI는 무엇이 어디서 어떻게 안 되는지 모릅니다. 그래서 추측으로 코드를 고치고, 멀쩡하던 부분까지 바꿉니다.</p>
+      </div>
+      <div class="swap-arrow">→</div>
+      <div class="swap-side swap-good">
+        <span class="swap-tag">✓ 이렇게 말하면</span>
+        <p class="swap-line">"src/Login.jsx에서 <b>재현</b>됩니다.
+① 로그인 버튼 클릭 →
+② 콘솔에 다음 <b>에러</b>:
+   Cannot read properties of undefined
+기대 동작은 대시보드 이동입니다.
+다른 파일은 건드리지 말아주세요."</p>
+        <p class="swap-note">파일 · 절차 · 에러 원문 · 기대 동작 · 범위. 이 다섯 가지가 지시의 뼈대입니다.</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="wrap">
+  <div class="rules">
+    <div class="rule">
+      <span class="rule-n">쓰는 법 01</span>
+      <h3>모르면 되물어라</h3>
+      <p>AI가 낯선 단어를 쓰면 그냥 넘기지 말고 여기서 찾아보세요. 뜻을 모른 채 "네"라고 하는 순간, 통제권은 넘어갑니다.</p>
+    </div>
+    <div class="rule">
+      <span class="rule-n">쓰는 법 02</span>
+      <h3>지시문에 그대로 넣어라</h3>
+      <p>각 항목의 <b>이렇게 지시하세요</b> 문장은 복사해 바로 쓸 수 있습니다. 대괄호 부분만 내 상황으로 바꾸면 됩니다.</p>
+    </div>
+    <div class="rule">
+      <span class="rule-n">쓰는 법 03</span>
+      <h3>한 번에 하나씩</h3>
+      <p>용어를 안다고 한 번에 다 시키면 안 됩니다. 잘 아는 사람일수록 작게 쪼개서 시키고, 매번 확인합니다.</p>
+    </div>
+  </div>
+</section>
+
+<div class="toolbar">
+  <div class="wrap">
+    <div class="toolbar-inner">
+      <div class="search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="용어 · 영어 · 설명으로 검색 (예: 리팩터링, state, 에러)" autocomplete="off" aria-label="용어 검색">
+      </div>
+      <div class="count"><b id="cnt">0</b> / <span id="tot">0</span> 항목</div>
+    </div>
+    <div class="tabs" id="tabs" role="group" aria-label="분류"></div>
+  </div>
+</div>
+
+<main class="wrap">
+  <div id="out"></div>
+</main>
+
+<footer class="wrap">
+  <p>바이브 코딩 회화집 — 전문가가 되기 위한 사전이 아니라, <b>전문가에게 정확히 부탁하기 위한</b> 사전입니다.</p>
+  <p>모르는 단어가 나오면 AI에게 이렇게 물어보세요 — "그 용어를 초등학생도 알 수 있게 비유로 설명하고, 지금 내 프로젝트에서는 무엇을 가리키는지 알려줘."</p>
+</footer>
+
+<script>
+const DATA = [
+/* ── 1. 판을 짜는 말 ── */
+{c:"판을 짜는 말",t:"프론트엔드",e:"frontend",d:"사용자 눈에 <b>보이는 화면</b> 쪽. 버튼, 글자, 색깔, 클릭 반응이 여기 속합니다.",s:"이건 프론트엔드만 수정하는 작업이야. 서버나 데이터베이스는 건드리지 마."},
+{c:"판을 짜는 말",t:"백엔드",e:"backend",d:"사용자 눈에 <b>안 보이는 처리</b> 쪽. 데이터 저장, 로그인 검증, 계산이 여기서 일어납니다.",s:"이 기능은 프론트엔드에서 처리할지 백엔드에서 처리할지 먼저 알려주고, 이유도 한 줄로 설명해줘."},
+{c:"판을 짜는 말",t:"프레임워크",e:"framework",d:"집으로 치면 <b>이미 지어진 골조</b>. 정해진 규칙대로 살을 붙이면 되므로 빠르지만, 그 규칙을 벗어나긴 어렵습니다.",s:"React 프레임워크를 쓸 거야. 앞으로 모든 코드는 이 기준에 맞춰서 작성해줘."},
+{c:"판을 짜는 말",t:"라이브러리",e:"library",d:"필요할 때 꺼내 쓰는 <b>도구 상자</b>. 프레임워크가 나를 부른다면, 라이브러리는 내가 부릅니다.",s:"이 기능을 직접 만들지 말고, 널리 쓰이는 라이브러리가 있으면 후보 2개와 장단점을 먼저 알려줘.",w:"라이브러리를 하나 추가할 때마다 프로젝트가 무거워지고 관리할 것이 늘어납니다. '정말 필요한가'를 한 번 물어보세요."},
+{c:"판을 짜는 말",t:"런타임",e:"runtime",d:"코드를 <b>실제로 돌려주는 실행 환경</b>. 브라우저, Node.js 같은 것들입니다. 같은 코드도 런타임이 다르면 안 돌아갑니다.",s:"이 코드는 어떤 런타임에서 실행되는 거야? 브라우저야, Node.js야?"},
+{c:"판을 짜는 말",t:"패키지 매니저",e:"npm / yarn / pip",d:"남이 만든 코드를 <b>내려받고 관리해주는 프로그램</b>. npm install 같은 명령이 여기 해당합니다.",s:"설치가 필요하면 실행할 명령어를 그대로 알려줘. 어느 폴더에서 실행해야 하는지도 같이 적어줘."},
+{c:"판을 짜는 말",t:"의존성",e:"dependency",d:"내 프로그램이 <b>돌아가려면 반드시 있어야 하는 남의 코드</b>. 하나가 깨지면 전체가 멈추기도 합니다.",s:"이 작업으로 새로 추가되는 의존성이 있으면 목록으로 먼저 알려줘. 없어도 되면 안 쓰는 방향으로 해줘."},
+{c:"판을 짜는 말",t:"빌드",e:"build",d:"사람이 쓴 코드를 <b>기계가 쓸 형태로 압축·변환</b>하는 과정. 빌드가 성공해야 배포할 수 있습니다.",s:"빌드가 통과하는지 확인할 수 있는 명령어를 알려줘. 실패하면 그 에러 메시지를 그대로 붙여넣을게."},
+{c:"판을 짜는 말",t:"배포",e:"deploy",d:"내 컴퓨터에서만 돌던 것을 <b>인터넷에 올려 남도 쓰게</b> 하는 일.",s:"지금 상태를 배포하려면 어떤 순서로 해야 해? 되돌리는 방법도 같이 알려줘."},
+{c:"판을 짜는 말",t:"로컬 / 프로덕션",e:"local / production",d:"<b>로컬</b>은 내 컴퓨터의 연습장, <b>프로덕션</b>은 실제 사용자가 쓰는 현장. 로컬에서 되던 게 프로덕션에서 안 되는 일이 아주 흔합니다.",s:"로컬에서는 잘 되는데 배포하면 안 돼. 두 환경의 차이 중 원인이 될 만한 것들을 가능성 높은 순으로 알려줘."},
+{c:"판을 짜는 말",t:"환경변수",e:"environment variable",d:"비밀번호나 API 키처럼 <b>코드에 직접 쓰면 안 되는 값</b>을 따로 보관하는 자리. 보통 .env 파일에 둡니다.",s:"비밀키는 코드에 직접 쓰지 말고 환경변수로 빼줘. .env.example 파일도 같이 만들어줘.",w:"AI가 만든 코드에 키가 그대로 박혀 있는 경우가 많습니다. 배포 전 꼭 확인하세요."},
+{c:"판을 짜는 말",t:"레포지토리",e:"repository",d:"프로젝트 코드가 통째로 담긴 <b>창고</b>. 보통 GitHub에 둡니다.",s:"이 프로젝트를 레포지토리로 만들려면 어떤 순서로 해야 해? 올리면 안 되는 파일도 알려줘."},
+{c:"판을 짜는 말",t:"커밋",e:"commit",d:"지금까지의 작업을 <b>저장 지점으로 찍어두는 것</b>. 게임의 세이브 포인트라고 보면 됩니다.",s:"지금 잘 돌아가니까 여기서 커밋할게. 커밋 메시지를 한 줄로 추천해줘.",w:"바이브 코딩에서 가장 강력한 안전장치입니다. 잘 되는 상태가 나오면 무조건 커밋부터 하세요."},
+{c:"판을 짜는 말",t:"브랜치",e:"branch",d:"원본은 그대로 두고 <b>따로 갈라져 실험하는 사본</b>. 망쳐도 원본은 무사합니다.",s:"이건 실험이니까 새 브랜치에서 작업할게. 브랜치 만드는 명령어 알려줘."},
+{c:"판을 짜는 말",t:"롤백",e:"rollback / revert",d:"<b>이전 저장 지점으로 되돌리는 것</b>. AI가 코드를 망쳤을 때 가장 먼저 떠올려야 할 단어입니다.",s:"지금 상태가 더 나빠졌어. 마지막 커밋으로 롤백하는 명령어를 알려줘."},
+{c:"판을 짜는 말",t:"보일러플레이트",e:"boilerplate",d:"어떤 프로젝트든 <b>거의 똑같이 반복되는 기본 뼈대 코드</b>.",s:"핵심 로직에 집중하고 싶어. 보일러플레이트는 최소한으로 줄여줘."},
+{c:"판을 짜는 말",t:"스캐폴딩",e:"scaffolding",d:"프로젝트의 <b>기본 폴더와 파일 구조를 자동으로 만들어주는 것</b>. 건축의 비계와 같습니다.",s:"본격적으로 만들기 전에 폴더 구조부터 스캐폴딩해줘. 각 폴더가 뭘 담는지 한 줄씩 설명도 붙여줘."},
+
+/* ── 2. 요구 수준을 정하는 말 ── */
+{c:"수준을 정하는 말",t:"MVP",e:"minimum viable product",d:"<b>딱 핵심 기능만 있는 최소 버전</b>. 처음부터 완성품을 시키면 AI는 길을 잃습니다.",s:"먼저 MVP만 만들자. 반드시 있어야 할 기능 3개만 고르고, 나머지는 목록으로 빼둬."},
+{c:"수준을 정하는 말",t:"프로토타입",e:"prototype",d:"<b>버려도 되는 시험작</b>. 되는지 확인하는 게 목적이지, 오래 쓸 코드가 아닙니다.",s:"이건 프로토타입이야. 예외 처리나 최적화는 신경 쓰지 말고 동작 확인만 되게 빠르게 만들어줘."},
+{c:"수준을 정하는 말",t:"목업 / 더미 데이터",e:"mockup / dummy data",d:"진짜 데이터 대신 넣어두는 <b>가짜 예시 데이터</b>. 화면부터 확인할 때 씁니다.",s:"아직 데이터베이스는 없어. 일단 더미 데이터 10개로 화면부터 만들어줘. 나중에 실제 데이터로 바꾸기 쉽게 한 곳에 모아둬."},
+{c:"수준을 정하는 말",t:"하드코딩",e:"hardcoding",d:"값을 <b>코드 안에 못 박아 넣는 것</b>. 빠르지만 나중에 바꾸기 어렵습니다.",s:"그 값은 하드코딩하지 말고 설정 파일이나 상수로 빼줘. 나중에 내가 직접 바꿀 수 있게.",w:"AI는 시키지 않으면 자주 하드코딩합니다. '나중에 이 값이 바뀔까?'를 스스로 물어보세요."},
+{c:"수준을 정하는 말",t:"리팩터링",e:"refactoring",d:"<b>겉으로 하는 일은 그대로 두고 코드 속만 정리</b>하는 것. 기능 추가가 아닙니다.",s:"기능은 절대 바꾸지 말고 리팩터링만 해줘. 동작이 달라지는 변경이 있으면 먼저 알려줘."},
+{c:"수준을 정하는 말",t:"마이그레이션",e:"migration",d:"<b>옛 방식에서 새 방식으로 옮겨 타는 작업</b>. 데이터 구조나 라이브러리 버전을 바꿀 때 씁니다.",s:"마이그레이션이 필요하면 단계별로 나눠줘. 각 단계마다 되돌리는 방법도 같이 알려줘."},
+{c:"수준을 정하는 말",t:"기술 부채",e:"technical debt",d:"<b>지금 빨리 가려고 대충 짜둔 것</b>이 나중에 이자처럼 불어나는 것. 바이브 코딩은 특히 쌓이기 쉽습니다.",s:"지금 이 방식으로 가면 나중에 어떤 기술 부채가 생기는지 알려줘. 감수할지는 내가 정할게."},
+{c:"수준을 정하는 말",t:"요구사항",e:"requirements",d:"<b>무엇을 만들지 문장으로 못 박은 것</b>. 이게 흐릿하면 AI는 매번 다른 걸 만듭니다.",s:"내 설명을 요구사항 목록으로 정리해줘. 애매해서 네가 임의로 정한 부분은 별표로 표시해줘.",w:"이 지시 하나가 바이브 코딩 성공률을 가장 크게 올립니다. 코딩 전에 반드시 하세요."},
+{c:"수준을 정하는 말",t:"사용자 스토리",e:"user story",d:"\"<b>누가 / 무엇을 하려고 / 왜</b>\"의 형식으로 기능을 적는 법. 기술 용어 없이도 정확해집니다.",s:"기능을 사용자 스토리 형식으로 정리해줘. '학생으로서 ~하고 싶다, 왜냐하면 ~' 형태로."},
+{c:"수준을 정하는 말",t:"해피 패스",e:"happy path",d:"<b>모든 게 정상일 때의 흐름</b>. AI는 기본적으로 이것만 만들어줍니다.",s:"지금은 해피 패스만 됐어. 이제 실패하는 경우들을 목록으로 뽑고 하나씩 처리하자."},
+{c:"수준을 정하는 말",t:"엣지 케이스",e:"edge case",d:"<b>드물지만 반드시 터지는 예외 상황</b>. 빈 입력, 0명, 아주 긴 글자, 인터넷 끊김 같은 것들.",s:"이 기능에서 생길 수 있는 엣지 케이스를 목록으로 뽑아줘. 그중 실제로 벌어질 만한 것만 처리하자."},
+{c:"수준을 정하는 말",t:"스코프",e:"scope",d:"<b>이번 작업이 손댈 범위</b>. 정해두지 않으면 AI가 옆 파일까지 고쳐놓습니다.",s:"이번 작업의 스코프는 [파일명] 한 개야. 다른 파일을 고쳐야 한다면 먼저 물어봐.",w:"'왜 멀쩡하던 게 갑자기 깨졌지?'의 원인은 대부분 스코프를 안 정해서입니다."},
+{c:"수준을 정하는 말",t:"단계적 구현",e:"incremental",d:"한 번에 완성하지 않고 <b>작동하는 작은 조각을 쌓아 올리는 방식</b>.",s:"한꺼번에 만들지 말고 단계적으로 가자. 1단계에서 뭘 할지 먼저 제안하고, 내가 확인하면 다음으로 넘어가."},
+
+/* ── 3. 데이터를 다루는 말 ── */
+{c:"데이터를 다루는 말",t:"데이터베이스",e:"database",d:"데이터를 <b>정리해 보관하고 빨리 찾아주는 창고</b>. 파일에 저장하는 것과는 차원이 다릅니다.",s:"이 데이터는 어디에 저장할지 후보를 알려줘. 지금 규모에 과한 선택이면 그것도 말해줘."},
+{c:"데이터를 다루는 말",t:"스키마",e:"schema",d:"데이터의 <b>서식·틀</b>. '학생은 이름, 학년, 반을 가진다' 같은 약속입니다.",s:"코드 짜기 전에 스키마부터 표로 정리해줘. 각 항목의 이름, 종류, 필수 여부를 적어줘.",w:"스키마를 나중에 바꾸면 이미 쌓인 데이터까지 손봐야 합니다. 앞에서 시간을 쓰세요."},
+{c:"데이터를 다루는 말",t:"CRUD",e:"create/read/update/delete",d:"데이터로 할 수 있는 <b>네 가지 기본 동작</b> — 만들기·읽기·고치기·지우기. 대부분의 앱은 이것의 조합입니다.",s:"이 화면에 필요한 CRUD 중 지금은 만들기와 읽기만 구현하자. 고치기·지우기는 다음에."},
+{c:"데이터를 다루는 말",t:"쿼리",e:"query",d:"창고에 대고 <b>\"이런 조건에 맞는 것만 꺼내줘\"라고 묻는 것</b>.",s:"이 조건으로 쿼리를 짜줘. 데이터가 1만 건일 때도 느리지 않은지 같이 봐줘."},
+{c:"데이터를 다루는 말",t:"API",e:"application programming interface",d:"프로그램끼리 <b>주고받는 창구</b>. 식당의 주문 카운터라고 보면 됩니다.",s:"이 기능은 외부 API를 써야 해? 쓴다면 무료 범위와 키 발급 방법까지 알려줘."},
+{c:"데이터를 다루는 말",t:"엔드포인트",e:"endpoint",d:"API의 <b>구체적인 주소 하나</b>. /students, /login 같은 것들.",s:"필요한 엔드포인트 목록을 먼저 표로 만들어줘. 주소, 하는 일, 받는 값, 주는 값 순으로."},
+{c:"데이터를 다루는 말",t:"요청 / 응답",e:"request / response",d:"내가 <b>보내는 것</b>과 서버가 <b>돌려주는 것</b>. 문제가 생기면 이 둘을 각각 확인해야 합니다.",s:"안 되는 원인을 찾고 싶어. 요청과 응답을 각각 콘솔에 찍어보는 코드를 넣어줘."},
+{c:"데이터를 다루는 말",t:"상태 코드",e:"status code",d:"응답에 붙는 <b>세 자리 숫자 결과표</b>. 200은 성공, 401은 로그인 필요, 404는 없는 주소, 500은 서버 잘못.",s:"응답 상태 코드가 [숫자]로 나와. 이 코드가 뜨는 흔한 원인부터 순서대로 짚어줘."},
+{c:"데이터를 다루는 말",t:"JSON",e:"JSON",d:"프로그램끼리 데이터를 주고받을 때 쓰는 <b>표준 표기 방식</b>. 중괄호와 따옴표로 된 그 형식입니다.",s:"이 데이터를 JSON 형태로 예시 3개만 보여줘. 실제로 들어올 값으로."},
+{c:"데이터를 다루는 말",t:"인덱스",e:"index",d:"책 뒤의 <b>찾아보기</b>와 같은 것. 없으면 데이터가 많아질수록 검색이 급격히 느려집니다.",s:"데이터가 많아졌을 때 느려질 만한 부분이 있으면 인덱스가 필요한지 알려줘."},
+{c:"데이터를 다루는 말",t:"페이지네이션",e:"pagination",d:"결과를 <b>한 번에 다 가져오지 않고 나눠 가져오는 것</b>. 목록 화면의 필수 요소입니다.",s:"목록이 길어질 수 있어. 페이지네이션이나 무한 스크롤로 20개씩 나눠서 가져오게 해줘."},
+{c:"데이터를 다루는 말",t:"백업",e:"backup",d:"데이터를 <b>따로 복사해 두는 것</b>. 코드는 다시 짜면 되지만 데이터는 사라지면 끝입니다.",s:"실제 데이터가 쌓이기 시작했어. 백업을 자동으로 만들려면 어떤 방법이 있는지 알려줘."},
+
+/* ── 4. 화면을 만드는 말 ── */
+{c:"화면을 만드는 말",t:"컴포넌트",e:"component",d:"화면을 이루는 <b>재사용 가능한 조각</b>. 버튼 하나, 카드 하나가 컴포넌트입니다.",s:"이 부분은 여러 곳에서 쓸 거야. 컴포넌트로 분리해줘. 파일 위치도 알려줘."},
+{c:"화면을 만드는 말",t:"상태",e:"state",d:"화면이 <b>기억하고 있는 지금의 값</b>. 입력한 글자, 열려 있는 창, 선택된 항목 같은 것.",s:"이 값은 어디에 상태로 두는 게 맞아? 여러 화면이 같이 봐야 하면 그것도 고려해줘.",w:"'값이 안 바뀌어요' 문제의 90%는 상태를 잘못 둔 탓입니다."},
+{c:"화면을 만드는 말",t:"props",e:"props",d:"부모 컴포넌트가 자식에게 <b>내려주는 값</b>. 상태가 내 것이라면 props는 위에서 받은 것입니다.",s:"이 값은 상태로 둘지 props로 받을지 정해주고, 왜 그런지 한 줄로 설명해줘."},
+{c:"화면을 만드는 말",t:"렌더링",e:"rendering",d:"코드를 <b>실제 화면으로 그려내는 일</b>. 값이 바뀌면 다시 그립니다(리렌더링).",s:"화면이 계속 깜빡거려. 불필요한 리렌더링이 일어나는지 확인해줘."},
+{c:"화면을 만드는 말",t:"라우팅",e:"routing",d:"주소에 따라 <b>어떤 화면을 보여줄지 정하는 규칙</b>. /home, /list 같은 것.",s:"필요한 화면과 주소를 라우팅 표로 먼저 정리해줘. 로그인 필요 여부도 표시해줘."},
+{c:"화면을 만드는 말",t:"반응형",e:"responsive",d:"화면 크기에 따라 <b>레이아웃이 알아서 바뀌는 것</b>. 휴대폰에서도 안 깨지게 하는 일.",s:"반응형으로 만들어줘. 특히 휴대폰 세로 화면(가로 390px)에서 가로 스크롤이 생기지 않게."},
+{c:"화면을 만드는 말",t:"로딩 상태",e:"loading state",d:"데이터를 기다리는 동안 <b>사용자에게 보여줄 화면</b>. 없으면 앱이 멈춘 것처럼 보입니다.",s:"로딩 상태, 에러 상태, 데이터가 하나도 없는 상태까지 세 가지를 다 만들어줘."},
+{c:"화면을 만드는 말",t:"유효성 검사",e:"validation",d:"사용자가 입력한 값이 <b>규칙에 맞는지 확인하는 것</b>. 빈칸, 이상한 이메일, 너무 긴 글자.",s:"입력 폼에 유효성 검사를 넣어줘. 규칙과 오류 문구를 표로 먼저 보여주고 확인받고 진행해."},
+{c:"화면을 만드는 말",t:"접근성",e:"accessibility, a11y",d:"눈이 불편하거나 마우스를 못 쓰는 사람도 <b>쓸 수 있게 만드는 것</b>. 학교·공공 서비스라면 특히 중요합니다.",s:"접근성을 지켜줘. 키보드만으로 조작 가능하게 하고, 이미지에 대체 텍스트를 넣어줘."},
+{c:"화면을 만드는 말",t:"CSS 프레임워크",e:"Tailwind, Bootstrap",d:"디자인을 <b>미리 만들어둔 규칙으로 빠르게 입히는 도구</b>.",s:"스타일은 Tailwind로 통일해줘. 별도 CSS 파일은 만들지 말고."},
+
+/* ── 5. 문제를 설명하는 말 ── */
+{c:"문제를 설명하는 말",t:"재현",e:"reproduce",d:"문제를 <b>같은 순서로 다시 일으키는 것</b>. 재현이 안 되면 고칠 수도 없습니다.",s:"재현 절차는 이렇습니다. ① ... ② ... ③ 이 시점에 문제 발생. 기대했던 동작은 ~입니다.",w:"AI에게 버그를 말할 때 가장 중요한 정보입니다. 순서대로 번호를 매겨 적으세요."},
+{c:"문제를 설명하는 말",t:"에러 메시지",e:"error message",d:"프로그램이 <b>스스로 남긴 사고 보고서</b>. 요약하지 말고 원문 그대로 붙여넣는 게 훨씬 낫습니다.",s:"에러 메시지 원문을 그대로 붙여넣을게. 이 중 어느 줄이 진짜 원인인지 짚어줘.",w:"\"에러가 났어요\"보다 에러 원문 한 줄이 백 배 유용합니다."},
+{c:"문제를 설명하는 말",t:"스택 트레이스",e:"stack trace",d:"에러가 <b>어느 파일 몇 번째 줄에서, 어떤 경로를 거쳐</b> 났는지 보여주는 목록.",s:"스택 트레이스 전체를 붙여넣을게. 내 코드에서 시작된 줄이 어디인지 표시해줘."},
+{c:"문제를 설명하는 말",t:"콘솔 / 개발자 도구",e:"console / devtools",d:"브라우저에서 <b>F12를 눌러 여는 점검 창</b>. 에러와 통신 내역이 다 여기 뜹니다.",s:"개발자 도구 어느 탭에서 뭘 봐야 하는지 단계별로 알려줘. 나는 이 도구가 처음이야."},
+{c:"문제를 설명하는 말",t:"로그",e:"log",d:"프로그램이 지나간 자리에 <b>남기는 기록</b>. 눈에 안 보이는 흐름을 확인할 때 씁니다.",s:"원인을 좁히고 싶어. 중간중간 로그를 찍는 코드를 넣어줘. 나중에 지우기 쉽게 표시해줘."},
+{c:"문제를 설명하는 말",t:"예외 처리",e:"exception handling",d:"문제가 생겨도 <b>프로그램이 통째로 멈추지 않게 대비하는 것</b>.",s:"여기 예외 처리를 넣어줘. 실패했을 때 사용자에게 보여줄 문구도 같이 정하자."},
+{c:"문제를 설명하는 말",t:"null / undefined",d:"<b>값이 비어 있다</b>는 뜻. 초보 단계에서 가장 자주 만나는 에러의 원인입니다.",e:"null / undefined",s:"undefined 관련 에러가 나. 값이 비어 있을 수 있는 지점에 방어 코드를 넣어줘."},
+{c:"문제를 설명하는 말",t:"무한 루프",e:"infinite loop",d:"코드가 <b>끝나지 않고 계속 도는 상태</b>. 화면이 멈추거나 요금이 폭증합니다.",s:"화면이 멈추고 브라우저가 버벅여. 무한 루프나 무한 재요청이 있는지 확인해줘."},
+{c:"문제를 설명하는 말",t:"레이스 컨디션",e:"race condition",d:"두 작업의 <b>도착 순서가 뒤바뀌어</b> 생기는 문제. 될 때도 있고 안 될 때도 있는 버그의 주범.",s:"이 버그는 될 때도 있고 안 될 때도 있어. 레이스 컨디션 가능성을 확인해줘."},
+{c:"문제를 설명하는 말",t:"CORS",e:"cross-origin",d:"<b>다른 주소의 서버에 요청할 때 브라우저가 막는 안전장치</b>. 초보자가 가장 자주 부딪히는 벽입니다.",s:"CORS 에러가 나. 이게 내 코드 문제인지 서버 설정 문제인지 먼저 구분해줘."},
+{c:"문제를 설명하는 말",t:"회귀",e:"regression",d:"<b>고치다가 멀쩡하던 기능이 망가지는 것</b>. 바이브 코딩에서 가장 자주 일어나는 사고.",s:"이 수정으로 회귀가 생길 만한 부분이 있으면 알려줘. 내가 직접 확인해볼 목록으로.",w:"수정 전에 커밋해두면, 회귀가 생겨도 되돌릴 수 있습니다."},
+{c:"문제를 설명하는 말",t:"사이드 이펙트",e:"side effect",d:"의도한 것 <b>말고 덤으로 일어나는 변화</b>. 좋은 뜻이 아닐 때가 많습니다.",s:"이 변경의 사이드 이펙트를 알려줘. 다른 화면이나 데이터에 영향이 가는지."},
+{c:"문제를 설명하는 말",t:"최소 재현 예제",e:"minimal reproducible example",d:"문제를 일으키는 <b>가장 짧은 코드 조각</b>. 코드 전체를 붙여넣는 것보다 훨씬 빨리 해결됩니다.",s:"이 문제만 남기고 나머지를 걷어낸 최소 재현 예제를 만들어줘. 그걸로 원인을 좁혀보자."},
+
+/* ── 6. 안전하게 만드는 말 ── */
+{c:"안전하게 만드는 말",t:"인증 / 인가",e:"authentication / authorization",d:"<b>인증</b>은 \"너 누구야?\"(로그인), <b>인가</b>는 \"너 이거 해도 돼?\"(권한). 다른 개념입니다.",s:"인증과 인가를 나눠서 설계해줘. 교사와 학생이 각각 뭘 할 수 있는지 표로 정리하고 시작하자."},
+{c:"안전하게 만드는 말",t:"토큰 / 세션",e:"token / session",d:"로그인한 뒤 <b>\"나 아까 그 사람이야\"를 증명하는 출입증</b>.",s:"로그인 상태를 어떻게 유지할지 방식을 정하고, 로그아웃과 만료 처리까지 같이 넣어줘."},
+{c:"안전하게 만드는 말",t:"OAuth / 소셜 로그인",e:"OAuth",d:"구글·카카오 계정으로 <b>비밀번호를 넘겨받지 않고 로그인시키는 방식</b>. 직접 만드는 것보다 훨씬 안전합니다.",s:"비밀번호를 직접 저장하고 싶지 않아. 구글 로그인으로 붙이려면 어떤 절차가 필요한지 순서대로 알려줘."},
+{c:"안전하게 만드는 말",t:"API 키 / 시크릿",e:"API key / secret",d:"<b>절대 남에게 보이면 안 되는 열쇠</b>. 화면 쪽 코드에 넣으면 누구나 볼 수 있습니다.",s:"이 키가 사용자 브라우저에 노출되는 위치인지 확인해줘. 노출되면 안 되는 키면 대안을 알려줘.",w:"키가 유출되면 요금 폭탄이 나올 수 있습니다. GitHub에 올리기 전 반드시 점검하세요."},
+{c:"안전하게 만드는 말",t:"보안 규칙",e:"security rules",d:"<b>누가 어떤 데이터를 읽고 쓸 수 있는지 서버에 못 박아 두는 규칙</b>. 화면에서 막는 것만으로는 전혀 안전하지 않습니다.",s:"화면에서 버튼을 숨기는 것 말고, 서버 쪽 보안 규칙으로도 막아줘. 규칙 내용을 사람이 읽을 수 있게 설명해줘.",w:"'로그인 안 하면 버튼이 안 보여요'는 보안이 아닙니다. 주소만 알면 그냥 뚫립니다."},
+{c:"안전하게 만드는 말",t:"입력값 검증",e:"sanitization",d:"사용자가 넣은 값에 <b>나쁜 코드가 섞여 있는지 걸러내는 것</b>.",s:"사용자 입력을 그대로 화면에 표시하는 부분이 있으면 알려주고, 안전하게 처리해줘."},
+{c:"안전하게 만드는 말",t:"개인정보 최소 수집",e:"data minimization",d:"<b>꼭 필요한 정보만 받고, 필요 없어지면 지우는 원칙</b>. 학생 정보를 다룬다면 특히 중요합니다.",s:"이 기능에 정말 필요한 개인정보만 남기고 나머지는 빼줘. 수집 항목 목록을 보여줘."},
+{c:"안전하게 만드는 말",t:"권한",e:"role",d:"사용자를 <b>역할별로 나눠 할 수 있는 일을 다르게 주는 것</b>. 관리자·교사·학생 같은 구분.",s:"권한을 관리자·교사·학생으로 나눠줘. 각 역할이 할 수 있는 일을 표로 먼저 확인하고 코드로 옮기자."},
+
+/* ── 7. 품질을 지키는 말 ── */
+{c:"품질을 지키는 말",t:"테스트",e:"test",d:"코드가 <b>제대로 도는지 자동으로 확인하는 코드</b>. 사람이 매번 눌러보지 않아도 됩니다.",s:"핵심 기능 3개에 대해서만 테스트를 짜줘. 테스트 실행 명령어도 알려줘."},
+{c:"품질을 지키는 말",t:"린트 / 포매터",e:"lint / formatter",d:"코드의 <b>맞춤법 검사기와 자동 정렬기</b>. 실수와 스타일 다툼을 줄여줍니다.",s:"린트와 포매터를 설정해줘. 저장할 때 자동으로 정리되게 하고 싶어."},
+{c:"품질을 지키는 말",t:"성능 최적화",e:"optimization",d:"<b>더 빠르고 가볍게 만드는 일</b>. 다만 느려지기 전에 미리 하면 대개 손해입니다.",s:"지금은 최적화하지 말고 동작에 집중하자. 나중에 느려질 만한 지점만 메모로 남겨줘."},
+{c:"품질을 지키는 말",t:"캐시",e:"cache",d:"한 번 가져온 것을 <b>잠시 저장해두고 다시 쓰는 것</b>. 빠르지만, 오래된 값이 남아 헷갈리기도 합니다.",s:"수정했는데 화면이 그대로야. 캐시 때문인지 확인하고, 캐시를 비우는 방법을 알려줘."},
+{c:"품질을 지키는 말",t:"README",e:"README",d:"프로젝트 첫 화면에 놓이는 <b>설명서</b>. 반년 뒤의 나를 위한 편지입니다.",s:"README를 만들어줘. 이 프로젝트가 뭔지, 실행 방법, 폴더 구조, 주의사항 순으로."},
+{c:"품질을 지키는 말",t:"주석",e:"comment",d:"코드 안에 남기는 <b>사람용 설명</b>. '무엇을'보다 '왜'를 적는 게 좋습니다.",s:"주요 함수에 주석을 한국어로 달아줘. 무엇을 하는지가 아니라 왜 이렇게 했는지 중심으로."},
+{c:"품질을 지키는 말",t:"버전",e:"version",d:"프로그램의 <b>판 번호</b>. 라이브러리 버전이 다르면 같은 코드도 안 돌아갑니다.",s:"내가 쓰는 버전은 [버전]이야. 이 버전 기준으로 코드를 써줘. 버전이 다르면 먼저 알려줘.",w:"AI가 옛 버전 문법으로 코드를 주는 일이 잦습니다. 버전을 먼저 알려주면 많이 줄어듭니다."},
+
+/* ── 8. AI와 일하는 말 ── */
+{c:"AI와 일하는 말",t:"컨텍스트",e:"context",d:"AI가 <b>지금 보고 있는 정보 전부</b>. 대화가 길어지면 앞부분을 잊어버립니다.",s:"대화가 길어졌어. 지금까지의 결정 사항과 현재 파일 구조를 요약해줘. 새 대화에 붙여넣게.",w:"길어진 대화에서 AI가 이상해지면 실력 문제가 아니라 컨텍스트 문제입니다. 요약 후 새로 시작하세요."},
+{c:"AI와 일하는 말",t:"할루시네이션",e:"hallucination",d:"AI가 <b>있지도 않은 함수나 라이브러리를 그럴듯하게 지어내는 것</b>.",s:"실제로 존재하는 것만 써줘. 확실하지 않으면 '확실하지 않다'고 말해줘. 지어내지 마."},
+{c:"AI와 일하는 말",t:"diff",e:"diff",d:"<b>바뀐 부분만 표시한 비교표</b>. 전체 코드를 다시 받는 것보다 뭐가 달라졌는지 알기 쉽습니다.",s:"전체 파일 말고 바뀐 부분만 diff로 보여줘. 어느 파일 몇 번째 줄인지 같이 적어줘."},
+{c:"AI와 일하는 말",t:"전체 재작성 vs 부분 수정",e:"rewrite vs patch",d:"AI에게 <b>어느 쪽을 원하는지 말해주지 않으면</b> 멀쩡한 코드까지 새로 써버립니다.",s:"기존 코드를 유지하고 필요한 부분만 수정해줘. 전부 새로 쓰는 건 원치 않아."},
+{c:"AI와 일하는 말",t:"파일 경로",e:"file path",d:"파일의 <b>정확한 위치 주소</b>. src/components/Login.jsx 처럼. 이걸 안 말하면 AI가 엉뚱한 곳을 고칩니다.",s:"수정할 파일 경로를 정확히 적어줘. 나도 경로를 말할 테니 그 파일만 건드려."},
+{c:"AI와 일하는 말",t:"체크포인트",e:"checkpoint",d:"작업 도중 <b>안전하게 되돌아올 수 있는 지점</b>. 커밋으로 만듭니다.",s:"여기까지 잘 되니까 체크포인트로 삼자. 다음 작업은 여기서 되돌릴 수 있는 형태로 진행해줘."},
+{c:"AI와 일하는 말",t:"스택 고정",e:"tech stack",d:"쓸 <b>기술 조합을 미리 정해두는 것</b>. 정해두지 않으면 AI가 대화마다 다른 방식을 제안합니다.",s:"우리 스택은 [React + Firebase]야. 앞으로 이 조합 안에서만 제안해줘. 벗어나야 하면 이유부터 말해줘."},
+{c:"AI와 일하는 말",t:"근거 요구",e:"grounding",d:"AI에게 <b>왜 그렇게 했는지 설명하게 하는 것</b>. 전문가가 아니어도 판단할 재료가 생깁니다.",s:"이 방식을 고른 이유와, 선택하지 않은 대안 하나를 함께 알려줘. 초보자도 알아들을 수 있게."},
+{c:"AI와 일하는 말",t:"모른다고 말하게 하기",e:"uncertainty",d:"AI는 기본적으로 <b>모른다고 잘 말하지 않습니다</b>. 명시적으로 허락해줘야 합니다.",s:"확신이 낮은 부분은 '확신 낮음'이라고 표시해줘. 내가 직접 확인해야 할 항목만 따로 모아줘."},
+{c:"AI와 일하는 말",t:"먼저 계획 요구",e:"plan first",d:"코드를 받기 전에 <b>말로 된 계획부터 받아보는 것</b>. 방향이 틀렸을 때 손해가 작습니다.",s:"코드를 쓰기 전에 어떻게 할지 계획을 먼저 말해줘. 내가 동의하면 그때 코드를 써줘.",w:"이 한 문장이 바이브 코딩에서 시간을 가장 많이 아껴줍니다."}
+];
+
+const CATS = [...new Set(DATA.map(d=>d.c))];
+let active = "전체", query = "";
+
+const tabsEl = document.getElementById('tabs');
+["전체",...CATS].forEach(c=>{
+  const b=document.createElement('button');
+  b.className='tab';b.textContent=c;b.setAttribute('aria-pressed',c===active);
+  b.onclick=()=>{active=c;[...tabsEl.children].forEach(x=>x.setAttribute('aria-pressed',x.textContent===c));render();};
+  tabsEl.appendChild(b);
+});
+
+document.getElementById('tot').textContent = DATA.length;
+document.getElementById('q').addEventListener('input',e=>{query=e.target.value.trim().toLowerCase();render();});
+
+const esc = s => s.replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+const hl = (s,q) => q ? s.replace(new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),'<mark>$1</mark>') : s;
+
+function render(){
+  const out=document.getElementById('out');
+  const list=DATA.map((d,i)=>({...d,n:String(i+1).padStart(3,'0')}))
+    .filter(d=>(active==="전체"||d.c===active))
+    .filter(d=>{
+      if(!query) return true;
+      return (d.t+d.e+d.d.replace(/<[^>]+>/g,'')+d.s).toLowerCase().includes(query);
+    });
+
+  document.getElementById('cnt').textContent=list.length;
+
+  if(!list.length){
+    out.innerHTML='<div class="empty"><p>그 말은 아직 회화집에 없습니다</p><small>AI에게 직접 물어보세요 — "그 용어를 비유로 설명해줘"</small></div>';
+    return;
+  }
+
+  const groups=[];
+  list.forEach(d=>{
+    let g=groups.find(x=>x.c===d.c);
+    if(!g){g={c:d.c,items:[]};groups.push(g);}
+    g.items.push(d);
+  });
+
+  out.innerHTML=groups.map(g=>`
+    <section class="group">
+      <div class="group-head"><h2>${g.c}</h2><span>${g.items.length}</span></div>
+      <div class="grid">
+        ${g.items.map(d=>`
+          <article class="entry">
+            <div class="entry-head">
+              <span class="num">${d.n}</span>
+              <span class="term">${hl(d.t,query)}</span>
+              <span class="eng">${hl(esc(d.e),query)}</span>
+            </div>
+            <p class="def">${d.d}</p>
+            <div class="say">
+              <span class="say-tag">이렇게 지시하세요</span>
+              <button class="copy" data-t="${esc(d.s)}">복사</button>
+              <p class="say-body">${hl(esc(d.s),query)}</p>
+              ${d.w?`<p class="caution">${d.w}</p>`:''}
+            </div>
+          </article>`).join('')}
+      </div>
+    </section>`).join('');
+
+  out.querySelectorAll('.copy').forEach(b=>{
+    b.onclick=async()=>{
+      try{
+        await navigator.clipboard.writeText(b.dataset.t);
+        const o=b.textContent;b.textContent='복사됨';setTimeout(()=>b.textContent=o,1400);
+      }catch(e){b.textContent='복사 실패';setTimeout(()=>b.textContent='복사',1400);}
+    };
+  });
+}
+render();
+</script>
+</body>
+</html>
